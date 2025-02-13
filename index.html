@@ -10,49 +10,60 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffebf0;
+            background-color: #32010d;
             text-align: center;
             font-family: Arial, sans-serif;
             overflow: hidden;
-            flex-direction: column;
+            color: white;
         }
         .container {
             position: relative;
         }
         .heart-card {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             background-color: red;
             position: relative;
             transform: rotate(45deg);
             cursor: pointer;
             transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .heart-card::before,
         .heart-card::after {
             content: '';
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             background-color: red;
             border-radius: 50%;
             position: absolute;
         }
         .heart-card::before {
-            top: -90px;
+            top: -100px;
             left: 0;
         }
         .heart-card::after {
-            left: -90px;
+            left: -100px;
             top: 0;
+        }
+        .heart-card span {
+            position: absolute;
+            transform: rotate(-45deg);
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
         }
         .message {
             display: none;
             padding: 20px;
-            background: white;
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
             margin-top: 20px;
             position: relative;
+            max-width: 90%;
             animation: fadeIn 1.5s ease-in-out;
         }
         .btn {
@@ -82,22 +93,29 @@
             pointer-events: none;
             display: none;
         }
+        img {
+            width: 100%;
+            max-width: 250px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="heart-card" id="heart"></div>
+        <div class="heart-card" id="heart">
+            <span>Love to Svetlana Zagainaia</span>
+        </div>
         <button class="btn" onclick="openCard()">Prolong Subscription</button>
         <div class="message" id="message">
             <h2>🌹 Happy Valentine's Day, My Love! ❤️</h2>
             <p>💌 Subscription successfully renewed for eternity! 💌</p>
             <p>No matter the distance, my heart is always with you...</p>
             <p>💖 Forever yours, Svetlana</p>
-            <img src="https://media.giphy.com/media/l0MYB8Ory7Hqefo9a/giphy.gif" width="200px">
+            <img src="https://media.giphy.com/media/l0MYB8Ory7Hqefo9a/giphy.gif">
         </div>
     </div>
     <canvas class="fireworks" id="fireworks"></canvas>
-    <audio id="bgMusic" loop>
+    <audio autoplay loop>
         <source src="https://dl.dropboxusercontent.com/scl/fi/16g22x1paha70c21v5urh/Jason_Mraz_Colbie_Caillat_-_Lucky_-Hydr0.org.mp3?rlkey=t3nszs0amrs9kyvlzlxp3qwdt&raw=1" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -107,12 +125,6 @@
             document.getElementById('heart').style.opacity = '0';
             document.getElementById('message').style.display = 'block';
             startFireworks();
-
-            // Play music after user interaction
-            const audio = document.getElementById("bgMusic");
-            if (audio.paused) {
-                audio.play().catch(error => console.log("Autoplay blocked:", error));
-            }
         }
 
         function startFireworks() {
@@ -123,12 +135,11 @@
             canvas.style.display = "block";
             
             let particles = [];
-
             function createParticles() {
                 for (let i = 0; i < 100; i++) {
                     particles.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * (canvas.height / 2),
+                        x: canvas.width / 2,
+                        y: canvas.height / 2,
                         vx: Math.random() * 4 - 2,
                         vy: Math.random() * 4 - 2,
                         size: Math.random() * 5 + 2,
@@ -137,7 +148,6 @@
                     });
                 }
             }
-
             function animateParticles() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach((p, i) => {
@@ -150,17 +160,12 @@
                     ctx.fill();
                     if (p.life <= 0) particles.splice(i, 1);
                 });
-
                 if (particles.length > 0) {
                     requestAnimationFrame(animateParticles);
                 } else {
-                    setTimeout(() => {
-                        createParticles();
-                        animateParticles();
-                    }, 500); // Fireworks every 0.5s
+                    canvas.style.display = "none";
                 }
             }
-
             createParticles();
             animateParticles();
         }
