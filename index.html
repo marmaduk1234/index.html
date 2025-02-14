@@ -16,10 +16,10 @@
             overflow: hidden;
             color: white;
             flex-direction: column;
+            padding: 20px;
         }
         .container {
             position: relative;
-            text-align: center;
         }
         .heart-card {
             width: 200px;
@@ -32,7 +32,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2;
+            margin-bottom: 20px;
         }
         .heart-card::before,
         .heart-card::after {
@@ -57,30 +57,15 @@
             font-size: 18px;
             font-weight: bold;
             color: white;
-            text-align: center;
-            width: 120px;
         }
         .message {
             display: none;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-            margin-top: 20px;
-            position: absolute;
-            width: 90vw;
-            max-width: 500px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 3;
-        }
-        .message h2 {
-            font-size: 24px;
-        }
-        .message p {
-            font-size: 18px;
-            line-height: 1.5;
+            max-width: 90%;
+            animation: fadeIn 1.5s ease-in-out;
         }
         .btn {
             margin-top: 20px;
@@ -95,6 +80,10 @@
         }
         .btn:hover {
             background: #e63950;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .fireworks {
             position: absolute;
@@ -114,10 +103,10 @@
 </head>
 <body>
     <div class="container">
-        <div class="heart-card" id="heart" onclick="openCard()">
+        <div class="heart-card" id="heart">
             <span>Love to Svetlana Zagainaia</span>
         </div>
-        <button class="btn" id="playMusic">Prolong Subscription</button>
+        <button class="btn" onclick="openCard()">Prolong Subscription</button>
         <div class="message" id="message">
             <h2>🌹 Happy Valentine's Day, My Love! ❤️</h2>
             <p>💌 Subscription successfully renewed for eternity! 💌</p>
@@ -127,7 +116,7 @@
         </div>
     </div>
     <canvas class="fireworks" id="fireworks"></canvas>
-    <audio id="bgMusic">
+    <audio id="bg-music" loop>
         <source src="https://dl.dropboxusercontent.com/scl/fi/16g22x1paha70c21v5urh/Jason_Mraz_Colbie_Caillat_-_Lucky_-Hydr0.org.mp3?rlkey=t3nszs0amrs9kyvlzlxp3qwdt&raw=1" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -137,11 +126,8 @@
             document.getElementById('heart').style.opacity = '0';
             document.getElementById('message').style.display = 'block';
             startFireworks();
+            document.getElementById('bg-music').play();
         }
-
-        document.getElementById('playMusic').addEventListener('click', function () {
-            document.getElementById('bgMusic').play();
-        });
 
         function startFireworks() {
             const canvas = document.getElementById("fireworks");
@@ -151,19 +137,18 @@
             canvas.style.display = "block";
             
             let particles = [];
-            function createParticles() {
-                for (let i = 0; i < 100; i++) {
-                    particles.push({
-                        x: canvas.width / 2,
-                        y: canvas.height / 2,
-                        vx: Math.random() * 4 - 2,
-                        vy: Math.random() * 4 - 2,
-                        size: Math.random() * 5 + 2,
-                        color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-                        life: 100
-                    });
-                }
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: Math.random() * 4 - 2,
+                    vy: Math.random() * 4 - 2,
+                    size: Math.random() * 5 + 2,
+                    color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                    life: 100
+                });
             }
+
             function animateParticles() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach((p, i) => {
@@ -182,7 +167,6 @@
                     canvas.style.display = "none";
                 }
             }
-            createParticles();
             animateParticles();
         }
     </script>
